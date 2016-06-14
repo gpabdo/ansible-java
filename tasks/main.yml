@@ -1,0 +1,27 @@
+---
+# tasks file for ansible-java
+
+#- package: name=wget state=latest
+
+- name: Download Java
+  command: 'wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" {{ java[java_version].link }} -P /tmp/'
+
+- name: Create directory
+  file: path={{ java_location }} state=directory mode=0755
+
+- name: Extract tar file
+  unarchive: src=/tmp/{{ java[java_version].tar }} dest={{ java_location }} copy=no
+
+- name: Clean up tar.
+  file: path=/tmp/{{ java[java_version].tar }} state=absent
+
+- file: src={{java_location}}/{{ java[java_version].dir }} dest={{ java_location }}/java owner=root group=root mode=0755 state=link
+
+- name: Create java home in environment
+  lineinfile: dest=/etc/environment line="export JAVA_HOME={{ java_location }}/java"
+
+- name: Create java home in profile
+  lineinfile: dest=/etc/profile line="export JAVA_HOME={{ java_location }}/java"
+
+- name: Add to path
+  lineinfile: dest=/etc/profile line="export PATH=$PATH:$JAVA_HOME/bin"

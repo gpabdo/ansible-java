@@ -1,0 +1,13 @@
+---
+# defaults file for ansible-java
+
+java_location: /usr/lib/jvm
+
+# Becuause of hard to template links, pick from builds below.
+java_version: 7u80
+
+java:
+  7u80:
+    link: http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz
+    dir: jdk1.7.0_80
+    tar: jdk-7u80-linux-x64.tar.gz
